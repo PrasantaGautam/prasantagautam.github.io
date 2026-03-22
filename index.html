@@ -65,7 +65,7 @@ function capture() {
   preview.src = imageData;
   statusText.innerText = "Sending image... ⏳";
 
-  fetch("https://YOUR-NGROK-URL/upload", {
+  fetch("https://paz-unsandalled-aracely.ngrok-free.dev/upload", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ image: imageData })
