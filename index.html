@@ -1,82 +1,22 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Camera Capture Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: white;
-      text-align: center;
-    }
-
-    h1 {
-      margin-top: 20px;
-      font-size: 28px;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      margin-top: 20px;
-    }
-
-    video, img {
-      width: 100%;
-      border-radius: 12px;
-      background: black;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .start {
-      background: #22c55e;
-    }
-
-    .capture {
-      background: #3b82f6;
-    }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
-    #status {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #cbd5f5;
-    }
-
-    .preview-title {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #94a3b8;
-    }
+    body { font-family: Arial; background: #0f172a; color: white; text-align: center; }
+    h1 { margin-top: 20px; font-size: 28px; }
+    .container { max-width: 400px; margin: auto; padding: 20px; }
+    .card { background: #1e293b; padding: 15px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin-top: 20px; }
+    video, img { width: 100%; border-radius: 12px; background: black; }
+    button { width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .start { background: #22c55e; }
+    .capture { background: #3b82f6; }
+    button:hover { opacity: 0.85; }
+    #status { margin-top: 10px; font-size: 14px; color: #cbd5f5; }
+    .preview-title { margin-top: 10px; font-size: 14px; color: #94a3b8; }
   </style>
 </head>
-
 <body>
 
 <h1>📷 Camera Capture</h1>
@@ -85,10 +25,8 @@
 
   <div class="card">
     <video id="video" autoplay></video>
-
     <button class="start" onclick="startCamera()">Start Camera</button>
     <button class="capture" onclick="capture()">Capture & Send</button>
-
     <p id="status">Status: Idle</p>
   </div>
 
@@ -119,33 +57,22 @@ async function startCamera() {
 function capture() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
-
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-
   ctx.drawImage(video, 0, 0);
 
   const imageData = canvas.toDataURL("image/png");
-
-  // Show preview
   preview.src = imageData;
-
   statusText.innerText = "Sending image... ⏳";
 
-  fetch("https://paz-unsandalled-aracely.ngrok-free.dev/uploads", {
+  fetch("https://YOUR-NGROK-URL/upload", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ image: imageData })
   })
   .then(res => res.json())
-  .then(data => {
-    statusText.innerText = "Image sent successfully ✅";
-  })
-  .catch(err => {
-    statusText.innerText = "Error sending image ❌";
-  });
+  .then(data => { statusText.innerText = "Image sent ✅"; })
+  .catch(err => { statusText.innerText = "Error sending image ❌"; console.error(err); });
 }
 </script>
 
